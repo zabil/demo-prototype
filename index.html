@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Gauge Prototype</title>
+    <style type="text/css" media="screen">
+        body {
+            overflow: hidden;
+        }
+
+        #editor {
+            margin: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<pre id="editor">
+# Buy products
+
+## Customer buys a product from website
+</pre>
+
+
+<script src="scripts/ace/ace.js"></script>
+<script src="scripts/ace/ext-language_tools.js"></script>
+
+<script>
+    var editor = ace.edit("editor");
+
+    editor.setOptions({
+        fontSize: "18px",
+        enableBasicAutocompletion: true
+    });
+    editor.setTheme("ace/theme/chrome");
+    editor.session.setMode("ace/mode/markdown");
+
+    var staticWordCompleter = {
+        getCompletions: function (editor, session, pos, prefix, callback) {
+            var wordList = ["Login as <name>", "Search for <book>", "Add <book> to the shopping cart"];
+            callback(null, wordList.map(function (word) {
+                return {
+                    caption: word,
+                    value: word,
+                    meta: "static"
+                };
+            }));
+        }
+    }
+
+    editor.completers = [staticWordCompleter];
+    editor.focus();
+
+</script>
