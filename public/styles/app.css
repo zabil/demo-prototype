@@ -18,7 +18,7 @@ body {
     width: 75%
 }
 
-.files {
+#files {
     float: right;
     width: 25%;
     margin: 0;
