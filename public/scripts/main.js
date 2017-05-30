@@ -20,3 +20,7 @@ var Specifications = {
         })));
     }
 }
+
+m.route(document.getElementById("files"), '/', {
+    '/': Specifications
+});
