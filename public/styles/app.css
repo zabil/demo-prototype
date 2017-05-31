@@ -28,7 +28,7 @@ ul {
     list-style-type: none;
     margin: 0;
     top:0;
-    font-family: "Source Code Pro";
+    font-family: monospace;
     padding: 0;
     width: 100%;
     background-color: #f1f1f1;

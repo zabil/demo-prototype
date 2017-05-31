@@ -2,8 +2,7 @@ var editor = ace.edit("editor");
 
 editor.setOptions({
     fontSize: "18px",
-    enableBasicAutocompletion: true,
-    printMargin: false
+    enableBasicAutocompletion: true
 });
 
 editor.setTheme("ace/theme/chrome");
