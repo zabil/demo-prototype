@@ -1,7 +1,18 @@
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
+
+if (process.argv.length != 3) {
+    console.log("Specify the specification(s) folder e.g.");
+    console.log("./spectacular.js specs");
+    process.exit(1);
+}
+
 var express = require('express')
 var app = express()
 var path = require('path');
 var fs = require('fs');
+
+var specifications_folder = process.argv.pop();
 
 app.use(express.static('public'));
 
@@ -10,7 +21,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/specifications', function (req, res) {
-    fs.readdir(path.join(__dirname + '/specs'), function (err, files) {
+    fs.readdir(path.join(__dirname + '/' + specifications_folder), function (err, files) {
         console.log(files);
         res.setHeader('Content-Type', 'application/json');
         res.send(files);
