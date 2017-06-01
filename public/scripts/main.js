@@ -9,7 +9,6 @@ function loadEditor() {
         enableBasicAutocompletion: true
     });
 
-    editor.setTheme("ace/theme/chrome");
     editor.session.setMode("ace/mode/markdown");
 
     var staticWordCompleter = {
@@ -24,6 +23,14 @@ function loadEditor() {
             }));
         }
     }
+
+    editor.commands.addCommand({
+        name: "showFileSelector",
+        bindKey: {win: "Ctrl-e", mac: "Command-e"},
+        exec: function () {
+            m.route.set('/specifications');
+        }
+    });
 
     editor.completers = [staticWordCompleter];
     editor.focus();
