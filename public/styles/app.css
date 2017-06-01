@@ -9,12 +9,6 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    width: 75%;
-}
-
-.editor {
-    float: left;
-    width: 75%
 }
 
 #files {

@@ -1,3 +1,34 @@
+var state = {
+}
+
+function loadEditor() {
+    var editor = state.editor = ace.edit("editor");
+
+    editor.setOptions({
+        fontSize: "18px",
+        enableBasicAutocompletion: true
+    });
+
+    editor.setTheme("ace/theme/chrome");
+    editor.session.setMode("ace/mode/markdown");
+
+    var staticWordCompleter = {
+        getCompletions: function (editor, session, pos, prefix, callback) {
+            var wordList = ["Login as <name>", "Search for <book>", "Add <book> to the shopping cart"];
+            callback(null, wordList.map(function (word) {
+                return {
+                    caption: word,
+                    value: word,
+                    meta: "static"
+                };
+            }));
+        }
+    }
+
+    editor.completers = [staticWordCompleter];
+    editor.focus();
+}
+
 var Data = {
     specifications: {
         list: [],
@@ -22,9 +53,8 @@ var Data = {
                     return value
                 }
             }).then(function (text) {
-                console.log(text);
-                Data.specification.text = text;
-            })
+                state.editor.getSession().setValue(text);
+            });
         }
     }
 }
@@ -41,7 +71,16 @@ var Specifications = {
     }
 }
 
+var Specification = {
+    oninit: Data.specification.fetch,
+    oncreate: loadEditor,
+    view: function () {
+        console.log("The text" + Data.specification.text);
+        return m('pre#editor');
+    }
+}
+
 m.route(document.getElementById("main"), '/specifications', {
     '/specifications': Specifications,
-    '/specifications/:file': Specifications
+    '/specifications/:file': Specification
 });
