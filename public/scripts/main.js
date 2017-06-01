@@ -1,5 +1,4 @@
-var state = {
-}
+var state = {}
 
 function loadEditor() {
     var editor = state.editor = ace.edit("editor");
@@ -13,14 +12,19 @@ function loadEditor() {
 
     var staticWordCompleter = {
         getCompletions: function (editor, session, pos, prefix, callback) {
-            var wordList = ["Login as <name>", "Search for <book>", "Add <book> to the shopping cart"];
-            callback(null, wordList.map(function (word) {
-                return {
-                    caption: word,
-                    value: word,
-                    meta: "static"
-                };
-            }));
+            m.request({
+                method: 'POST',
+                url: '/steps',
+                data: {filter: prefix}
+            }).then(function (lines) {
+                callback(null, lines.map(function (line) {
+                    return {
+                        caption: line,
+                        value: line,
+                        meta: "static"
+                    };
+                }));
+            })
         }
     }
 
@@ -52,42 +56,54 @@ var Data = {
     },
     specification: {
         text: '',
-        fetch: function (vnode) {
-            m.request({
-                method: 'GET',
-                url: 'specification/' + vnode.attrs.file,
-                deserialize: function (value) {
-                    return value
-                }
-            }).then(function (text) {
-                state.editor.getSession().setValue(text);
-            });
+        fetch: function (file) {
+            if (file) {
+                m.request({
+                    method: 'GET',
+                    url: 'specification/' + file,
+                    deserialize: function (value) {
+                        return value
+                    }
+                }).then(function (text) {
+                    state.editor.getSession().setValue(text);
+                });
+            }
         }
     }
-}
+};
 
 var Specifications = {
     oninit: Data.specifications.fetch,
     view: function () {
-        return [m('h3', 'Select a specification file'), m("ul", m("li", Data.specifications.list.map(function (specification) {
-            return m("a", {
-                href: "/specifications/" + specification,
-                oncreate: m.route.link
-            }, specification);
-        })))];
+        return [
+            m('button', {
+                onclick: function () {
+                    m.route.set('/specification')
+                }
+            }, 'Create new'),
+            m('p', 'Or'),
+            m('h3', 'Select a specification file'),
+            m("ul", m("li", Data.specifications.list.map(function (specification) {
+                return m("a", {
+                    href: "/specification/" + specification,
+                    oncreate: m.route.link
+                }, specification);
+            })))];
     }
-}
+};
 
 var Specification = {
-    oninit: Data.specification.fetch,
+    oninit: function (vnode) {
+        Data.specification.fetch(vnode.attrs.file);
+    },
     oncreate: loadEditor,
     view: function () {
-        console.log("The text" + Data.specification.text);
         return m('pre#editor');
     }
-}
+};
 
 m.route(document.getElementById("main"), '/specifications', {
     '/specifications': Specifications,
-    '/specifications/:file': Specification
+    '/specification/:file': Specification,
+    '/specification': Specification
 });

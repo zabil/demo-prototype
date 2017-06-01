@@ -47,9 +47,11 @@ app.post('/steps', function (req, res) {
     grep(req.body.filter, specifications_folder, function (matches) {
         matches.forEach(function (match) {
             match.results.forEach(function (result) {
-                lines.push(result.line);
+                if(result.line.startsWith('* ')){
+                    lines.push(result.line.replace(/\* /g, ''));
+                }
             })
-        })
+        });
         res.send(unique(lines));
     });
 });
