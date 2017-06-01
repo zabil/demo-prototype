@@ -1,4 +1,3 @@
-
 body {
     overflow: hidden;
 }
@@ -24,17 +23,20 @@ body {
     margin: 0;
 }
 
+#main {
+    width: 800px;
+    margin: 0 auto;
+}
+
 ul {
     list-style-type: none;
-    margin: 0;
-    top:0;
     font-family: monospace;
     padding: 0;
-    width: 100%;
     background-color: #f1f1f1;
     position: fixed;
-    height: 100%;
+    width: 800px;
     overflow: auto;
+    border: solid lightgrey 1px;
 }
 
 li a {
@@ -42,6 +44,7 @@ li a {
     color: #000;
     padding: 8px 16px;
     text-decoration: none;
+    border-bottom: solid lightgrey 1px;
 }
 
 li a.active {

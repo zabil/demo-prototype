@@ -31,18 +31,17 @@ var Data = {
 
 var Specifications = {
     oninit: Data.specifications.fetch,
-    view: function (vnode) {
-        return m("ul", m("li", Data.specifications.list.map(function (specification) {
+    view: function () {
+        return [m('h3', 'Select a specification file'), m("ul", m("li", Data.specifications.list.map(function (specification) {
             return m("a", {
                 href: "/specifications/" + specification,
-                oncreate: m.route.link,
-                class: vnode.attrs.file === specification ? 'active' : '',
+                oncreate: m.route.link
             }, specification);
-        })));
+        })))];
     }
 }
 
-m.route(document.getElementById("files"), '/specifications', {
+m.route(document.getElementById("main"), '/specifications', {
     '/specifications': Specifications,
     '/specifications/:file': Specifications
 });
