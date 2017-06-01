@@ -12,6 +12,9 @@
   "author": "Thoughtworks",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.15.3"
+    "array-unique": "^0.3.2",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "simple-grep": "0.0.1"
   }
 }
