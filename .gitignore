@@ -4,3 +4,4 @@ node_modules/
 *.iml
 *~
 bin/
+public/styles/main.css
