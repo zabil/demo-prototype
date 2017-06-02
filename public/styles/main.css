@@ -1,0 +1,99 @@
+body {
+    overflow: hidden
+}
+
+a {
+    outline: 0;
+}
+
+#navigator {
+    position: absolute;
+    border: solid lightgray 1px;
+    top: 0;
+    width: 398px;
+    left: 0;
+    bottom: 0;
+    border-top: 0;
+    background: #f9f9f9;
+}
+
+#action {
+    top: 0;
+    position: absolute;
+    left: 400px;
+    bottom: 50px;
+    height: 49px;
+    right: 0;
+    border-bottom: solid lightgray 1px;
+}
+
+#action button {
+    float: right;
+    margin: 10px
+}
+
+#action h3 {
+    float: left;
+    margin: 10px;
+    font-family: monospace;
+}
+
+#editor {
+    position: absolute;
+    margin: 0;
+    top: 50px;
+    bottom: 0;
+    left: 400px;
+    right: 0
+}
+
+#files {
+    float: right;
+    width: 25%;
+    margin: 0
+}
+
+#main {
+    width: 800px;
+    margin: 0 auto
+}
+
+#navigator .logo {
+    background-color: #EDEDED;
+    height: 38px;
+    padding: 15px;
+    width: 368px;
+    border-bottom: solid lightgray 1px;
+}
+
+#navigator ul {
+    list-style-type: none;
+    font-family: monospace;
+    padding: 0;
+    position: absolute;
+    width: 398px;
+    overflow: auto;
+    top: 69px;
+    margin: 0;
+}
+
+#navigator li a {
+    display: block;
+    color: #000;
+    padding: 15px 15px;
+    text-decoration: none;
+}
+
+#navigator h3 {
+    margin: 10px;
+    font-family: monospace;
+}
+
+#navigator li a.active {
+    background-color: #f5c10e;
+}
+
+#navigator li a:hover:not(.active) {
+    background-color: #CECECE;
+    color: white
+}

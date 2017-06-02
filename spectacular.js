@@ -1,36 +1,25 @@
 #!/bin/sh
 ':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
 
-if (process.argv.length != 3) {
+if (process.argv.length !== 3) {
     console.log("Specify the specification(s) folder e.g.");
     console.log("./spectacular.js specs");
     process.exit(1);
 }
 
-var express = require('express')
-
-var app = express()
-
-var bodyParser = require('body-parser');
-app.use(bodyParser.json()); // for parsing application/json
 
 var path = require('path');
 var fs = require('fs');
+var express = require('express');
+var bodyParser = require('body-parser');
 var unique = require('array-unique');
 
-var specifications_folder = path.join(__dirname + '/' + process.argv.pop());
-
+var app = express();
+app.use(bodyParser.json()); // for parsing application/json
 app.use(express.static('public'));
 app.use(express.static('bin'));
 
-var stylus = require('express-stylus');
-var nib = require('nib');
-
-app.use(stylus({
-    src: 'public',
-    use: [nib()],
-    import: ['nib']
-}));
+var specifications_folder = path.join(__dirname + '/' + process.argv.pop());
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
@@ -41,13 +30,13 @@ app.get('/specifications', function (req, res) {
         res.setHeader('Content-Type', 'application/json');
         res.send(files);
     });
-})
+});
 
 app.get('/specification/:file', function (req, res) {
     fs.readFile(path.join(__dirname + '/specs/' + req.params.file), 'utf8', function (err, data) {
         res.setHeader('Content-Type', 'text/markdown');
         res.send(data);
-    })
+    });
 });
 
 var grep = require('simple-grep');
@@ -57,10 +46,10 @@ app.post('/steps', function (req, res) {
     grep(req.body.filter, specifications_folder, function (matches) {
         matches.forEach(function (match) {
             match.results.forEach(function (result) {
-                if(result.line.startsWith('* ')){
+                if (result.line.startsWith('* ')) {
                     lines.push(result.line.replace(/\* /g, ''));
                 }
-            })
+            });
         });
         res.send(unique(lines));
     });

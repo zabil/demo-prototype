@@ -1,9 +1,10 @@
 m = require('mithril');
 ace = require('brace');
+
 require('brace/mode/markdown');
 require('brace/ext/language_tools');
 
-var state = {}
+var state = {};
 
 function loadEditor() {
     var editor = state.editor = ace.edit("editor");
@@ -32,7 +33,7 @@ function loadEditor() {
                 }));
             })
         }
-    }
+    };
 
     editor.commands.addCommand({
         name: "showFileSelector",
@@ -49,12 +50,16 @@ function loadEditor() {
 var Data = {
     specifications: {
         list: [],
-        fetch: function () {
-            if (Data.specifications.list.length === 0) {
+        isEmpty: function () {
+            return Data.specifications.list.length === 0;
+        },
+        fetch: function (callback) {
+            if (Data.specifications.isEmpty()) {
                 m.request({
                     method: 'GET',
                     url: 'specifications'
                 }).then(function (specifications) {
+                    callback(specifications[0]);
                     Data.specifications.list = specifications;
                 })
             }
@@ -62,15 +67,18 @@ var Data = {
     },
     specification: {
         text: '',
+        current: '',
         fetch: function (file) {
-            if (file) {
+            if (Data.specification.current !== file) {
                 m.request({
                     method: 'GET',
-                    url: 'specification/' + file,
+                    url: 'specification/:file',
+                    data: {file: file},
                     deserialize: function (value) {
                         return value
                     }
                 }).then(function (text) {
+                    Data.specification.current = file;
                     state.editor.getSession().setValue(text);
                 });
             }
@@ -78,38 +86,37 @@ var Data = {
     }
 };
 
-var Specifications = {
-    oninit: Data.specifications.fetch,
-    view: function () {
-        return [
-            m('button', {
-                onclick: function () {
-                    m.route.set('/specification')
-                }
-            }, 'Create new'),
-            m('p', 'Or'),
-            m('h3', 'Select a specification file'),
-            m("ul", m("li", Data.specifications.list.map(function (specification) {
-                return m("a", {
-                    href: "/specification/" + specification,
-                    oncreate: m.route.link
-                }, specification);
-            })))];
-    }
-};
-
 var Specification = {
-    oninit: function (vnode) {
+    onupdate: function (vnode) {
         Data.specification.fetch(vnode.attrs.file);
     },
+    oninit: function () {
+        Data.specifications.fetch(function (firstSpecification) {
+            m.route.set('/' + firstSpecification);
+        });
+    },
     oncreate: loadEditor,
-    view: function () {
-        return m('pre#editor');
+    view: function (vnode) {
+        return [
+            m('div#navigator', [
+                m('div.logo',
+                    m('img', {src: 'images/logo.svg', height: 38, width: 100})),
+                m("ul",
+                    m("li", Data.specifications.list.map(function (specification) {
+                        return m("a", {
+                            href: "/" + specification,
+                            class: vnode.attrs.file === specification ? 'active' : '',
+                            oncreate: m.route.link
+                        }, specification);
+                    })))]),
+            m('div#action', [
+                m('h3', vnode.attrs.file),
+                m('button', 'Save')]),
+            m('pre#editor')];
     }
 };
 
-m.route(document.getElementById("main"), '/specifications', {
-    '/specifications': Specifications,
-    '/specification/:file': Specification,
-    '/specification': Specification
+m.route(document.getElementById("main"), '/', {
+    '/': Specification,
+    '/:file': Specification,
 });
