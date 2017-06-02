@@ -21,6 +21,7 @@ var unique = require('array-unique');
 var specifications_folder = path.join(__dirname + '/' + process.argv.pop());
 
 app.use(express.static('public'));
+app.use(express.static('bin'));
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
