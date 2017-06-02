@@ -6,6 +6,6 @@ This is an app to quickly prototype features.
 
 ```
 $ npm install
-$ node app.js
+$ npm start
 $ open http://localhost:3000/
 ```
