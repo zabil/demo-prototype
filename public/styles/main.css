@@ -60,10 +60,15 @@ a {
 
 #navigator .logo {
     background-color: #EDEDED;
-    height: 38px;
-    padding: 15px;
-    width: 368px;
+    height: 49px;
+    width: 398px;
     border-bottom: solid lightgray 1px;
+    position: absolute;
+}
+
+#navigator .logo img {
+    padding: 7px;
+
 }
 
 #navigator ul {
@@ -73,14 +78,14 @@ a {
     position: absolute;
     width: 398px;
     overflow: auto;
-    top: 69px;
+    top: 50px;
     margin: 0;
 }
 
 #navigator li a {
     display: block;
     color: #000;
-    padding: 15px 15px;
+    padding: 12px 10px;
     text-decoration: none;
 }
 
