@@ -4,8 +4,8 @@
   "description": "A prototype for gauge features",
   "main": "index.js",
   "scripts": {
-    "prestart": "webpack src/index.js bin/app.js",
-    "watch": "webpack src/index.js bin/app.js --watch",
+    "prestart": "webpack",
+    "watch": "webpack --watch",
     "start": "./spectacular.js specs"
   },
   "repository": {
@@ -22,9 +22,7 @@
     "body-parser": "^1.17.2",
     "brace": "^0.10.0",
     "express": "^4.15.3",
-    "express-stylus": "^0.1.0",
     "mithril": "^1.1.1",
-    "nib": "^1.1.2",
     "simple-grep": "0.0.1",
     "webpack": "^2.6.1"
   },
