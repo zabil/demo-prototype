@@ -27,6 +27,7 @@
     "webpack": "^2.6.1"
   },
   "devDependencies": {
+    "protobufjs": "^6.7.3",
     "webpack": "^2.6.1"
   }
 }
