@@ -1,33 +1,13 @@
 {
-  "name": "proto",
+  "name": "gauge-js-template",
   "version": "0.0.1",
-  "description": "A prototype for gauge features",
-  "main": "index.js",
+  "description": "Starter template for writing JavaScript tests for Gauge",
   "scripts": {
-    "prestart": "webpack",
-    "watch": "webpack --watch",
-    "start": "./spectacular.js specs"
+    "test": "gauge specs/"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/getgauge/prototype.git"
-  },
-  "keywords": [
-    "gauge"
-  ],
-  "author": "Thoughtworks",
-  "license": "MIT",
-  "dependencies": {
-    "array-unique": "^0.3.2",
-    "body-parser": "^1.17.2",
-    "brace": "^0.10.0",
-    "express": "^4.15.3",
-    "mithril": "^1.1.1",
-    "simple-grep": "0.0.1",
-    "webpack": "^2.6.1"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "protobufjs": "^6.7.3",
-    "webpack": "^2.6.1"
+    "synchronize": "^2.0.0",
+    "synket": "^1.0.3"
   }
 }

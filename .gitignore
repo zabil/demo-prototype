@@ -4,3 +4,6 @@ node_modules/
 *.iml
 *~
 bin/
+.gauge
+logs
+reports

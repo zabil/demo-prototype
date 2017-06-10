@@ -1,39 +1,50 @@
 var protobuf = require("protobufjs");
+var spawn = require('child_process').spawn;
+var net = require('net');
+var sync = require('synchronize');
 
-var socket = require("net").Socket();
+var createMessage = function(callback) {
+	var proto = protobuf.load("gauge-proto/api.proto");
+	proto.then(function(root) {
+		var message = root.lookupType("gauge.messages.APIMessage");
+	    var payload = {
+		        messageType: message.APIMessageType.GetAllStepsRequest,
+		        allStepsRequest: {}
+		    };
+		callback(message.encodeDelimited(message.create(payload)).finish());
+	})
+};
 
-socket.connect(9999, "localhost");
+var messageHandler = function(bytes) {
+    console.log("Received response");
+    var message = APIMessage.decodeDelimited(bytes);
+    console.log(JSON.stringify(message));
+};
 
-protobuf.load("../gauge-proto/api.proto").then(function(root) {
-    var APIMessage = root.lookupType("gauge.messages.APIMessage");
+var Project = function(path) {
+	var socket = this.socket = net.Socket();
+	
+	var port = (Math.random() * 999 | 6000) + 1;
+	var daemon = spawn('gauge', ['daemonize', '--api-port', port], { cwd: path});
+	
+	daemon.stdout.on('data', function(){
+		console.log('spawn');
+		socket.connect(port, 'localhost');
+		socket.on('data', messageHandler);
+	});
+	
+	daemon.on('error', (err) => {
+	  console.log('Failed to start child process.');
+	});
+}
 
-    var messageHandler = function(bytes) {
-        console.log("Received response");
-        var message = APIMessage.decodeDelimited(bytes);
-        console.log(JSON.stringify(message));
-    };
+Project.prototype.steps = function() {
+	var self = this;
+	createMessage(function(message){
+		self.socket.write(message);
+	});
+}
 
-    socket.on("data", messageHandler);
-
-    var payload = {
-        messageType: APIMessage.APIMessageType.GetAllStepsRequest,
-        allStepsRequest: {}
-    };
-
-    // Verify the payload if necessary (i.e. when possibly incomplete or invalid)
-    var errMsg = APIMessage.verify(payload);
-    if (errMsg)
-        throw Error(errMsg);
-
-    // Create a new message
-    var msg = APIMessage.create(payload); // or use .fromObject if conversion is necessary
-
-    // Encode a message to an Uint8Array (browser) or Buffer (node)
-    var buffer = APIMessage.encodeDelimited(msg).finish();
-
-
-    // ... do something with buffer
-    console.log("Sending message");
-    socket.write(buffer);
-    console.log("Message sent");
-});
+module.exports = {
+	Project: function(path) { return new Project(path) }
+};

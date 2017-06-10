@@ -13,13 +13,17 @@ var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
 var unique = require('array-unique');
+var spawn = require('child_process');
+var os = require('os');
 
 var app = express();
 app.use(bodyParser.json()); // for parsing application/json
 app.use(express.static('public'));
 app.use(express.static('bin'));
 
-var specifications_folder = path.join(__dirname + '/' + process.argv.pop());
+var specifications_folder = path.resolve(process.argv.pop());
+
+var gaugeDaemon = spawn('guage', ['--daemonize', '--api-port', '9999'], { "cwd": specifications_folder });
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
