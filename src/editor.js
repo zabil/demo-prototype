@@ -19,7 +19,7 @@ module.exports = {
         var staticWordCompleter = {
             getCompletions: function (editor, session, pos, prefix, callback) {
                 m.request({
-                    method: 'POST',
+                    method: 'GET',
                     url: '/steps',
                     data: {filter: prefix}
                 }).then(function (lines) {
