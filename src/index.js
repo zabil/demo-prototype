@@ -1,6 +1,5 @@
-var m = require('mithril');
-var editor = require('./editor');
-
+const m = require('mithril')
+const monaco = require("./monaco");
 
 var Data = {
     specifications: {
@@ -34,7 +33,7 @@ var Data = {
                     }
                 }).then(function (text) {
                     Data.specification.current = file;
-                    editor.setValue(text);
+                    monaco.setValue(text);
                 });
             }
         }
@@ -51,7 +50,7 @@ var Specification = {
         });
     },
     oncreate: function () {
-        editor.load();
+        monaco.init();
     },
     view: function (vnode) {
         return [
