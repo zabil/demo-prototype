@@ -8,15 +8,19 @@ var Data = {
             return Data.specifications.list.length === 0;
         },
         fetch: function (callback) {
-            if (Data.specifications.isEmpty()) {
-                m.request({
-                    method: 'GET',
-                    url: 'specifications'
-                }).then(function (specifications) {
-                    callback(specifications[0]);
-                    Data.specifications.list = specifications;
-                })
-            }
+            return new Promise(function(resolve, reject){
+                if (Data.specifications.isEmpty()) {
+                    m.request({
+                        method: 'GET',
+                        url: 'specifications'
+                    }).then(function (specifications) {
+                        Data.specifications.list = specifications;
+                        resolve(specifications[0]);
+                    })
+                } else {
+                    resolve(Data.specifications.list[0]);
+                }
+            });
         }
     },
     specification: {
@@ -45,12 +49,11 @@ var Specification = {
         Data.specification.fetch(vnode.attrs.file);
     },
     oninit: function () {
-        Data.specifications.fetch(function (firstSpecification) {
-            m.route.set('/' + firstSpecification);
+        monaco.init()
+        .then(Data.specifications.fetch)
+        .then(function (first_spec) {
+            m.route.set('/' + first_spec);
         });
-    },
-    oncreate: function () {
-        monaco.init();
     },
     view: function (vnode) {
         return [

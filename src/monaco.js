@@ -20,31 +20,35 @@ var loader = function() {
 }
 
 var init = function() {
-    loader()
-    .then(() => {
-        this.editor = monaco.editor.create(document.getElementById('editor'), {
-            language: 'markdown',
-            automaticLayout: true,
-            fontSize: 16
-        });
-        monaco.languages.registerCompletionItemProvider('markdown', {
-            provideCompletionItems : function(model, position) {
-                var prefix = model.getValueInRange({
-                    startLineNumber: 1, 
-                    startColumn: 1, 
-                    endLineNumber: position.lineNumber, 
-                    endColumn: position.column
-                });
-                m.request({
-                    method: 'GET',
-                    url: '/steps',
-                    data: {filter: prefix}
-                })
-                .then(function (lines) {
-                    console.log(lines);
-                })
-            }
-        });
+    var self = this;
+    return new Promise(function(resolve, reject){
+        loader()
+        .then(() => {
+            self.editor = monaco.editor.create(document.getElementById('editor'), {
+                language: 'markdown',
+                automaticLayout: true,
+                fontSize: 16
+            });
+            monaco.languages.registerCompletionItemProvider('markdown', {
+                provideCompletionItems : function(model, position) {
+                    var prefix = model.getValueInRange({
+                        startLineNumber: 1,
+                        startColumn: 1,
+                        endLineNumber: position.lineNumber,
+                        endColumn: position.column
+                    });
+                    m.request({
+                        method: 'GET',
+                        url: '/steps',
+                        data: {filter: prefix}
+                    })
+                    .then(function (lines) {
+                        console.log(lines);
+                    })
+                }
+            });
+            resolve();
+        }).catch(reject);
     });
 };
 
