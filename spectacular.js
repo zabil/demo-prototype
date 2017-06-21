@@ -45,7 +45,7 @@ app.get('/specification/:file', function (req, res) {
 app.get('/steps', function (req, res) {
     project
         .get_steps()
-        .then((data) => {console.log(data);res.send(data)})
+        .then((data) => res.send(data))
         .catch(console.log);
 });
 

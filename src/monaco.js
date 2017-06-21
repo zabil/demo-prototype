@@ -31,21 +31,27 @@ var init = function() {
             });
             monaco.languages.registerCompletionItemProvider('markdown', {
                 provideCompletionItems : function(model, position) {
-                    var prefix = model.getValueInRange({
-                        startLineNumber: 1,
-                        startColumn: 1,
-                        endLineNumber: position.lineNumber,
-                        endColumn: position.column
-                    });
-                    m.request({
-                        method: 'GET',
-                        url: '/steps',
-                        data: {filter: prefix}
-                    })
-                    .then(function (lines) {
-                        console.log(lines);
-                    })
-                }
+                    var prefix = model.getLineContent(position.lineNumber);
+                    if(prefix.startsWith('* ')){
+                        return m.request({
+                            method: 'GET',
+                            url: '/steps',
+                            data: {filter: prefix}
+                        })
+                        .then(function (lines) {
+                            return lines.map(function(l){
+                                var counter=0;
+                                var suggestion = l.replace(/\{\}/g, () => '{{param'+ ++counter + '}}');
+                                return {
+                                    label: l,
+                                    kind: monaco.languages.CompletionItemKind.Snippet,
+                                    insertText: suggestion
+                                }
+                            });
+                        });
+                    }
+                    return [];
+                },
             });
             resolve();
         }).catch(reject);
