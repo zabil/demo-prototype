@@ -3,7 +3,7 @@
 
 if (process.argv.length !== 3) {
     console.log("Specify the specification(s) folder e.g.");
-    console.log("./spectacular.js specs");
+    console.log("./griffin.js specs");
     process.exit(1);
 }
 

@@ -4,7 +4,7 @@
   "description": "Starter template for writing JavaScript tests for Gauge",
   "scripts": {
     "prestart": "./node_modules/.bin/webpack --config webpack.config.js",
-    "start": "./spectacular.js sample",
+    "start": "./griffin.js sample",
     "test": "gauge specs/"
   },
   "dependencies": {
