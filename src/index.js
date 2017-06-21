@@ -1,4 +1,5 @@
-const m = require('mithril')
+var notie = require('notie');
+const m = require('mithril');
 const monaco = require("./monaco");
 
 var Data = {
@@ -55,7 +56,20 @@ var Specification = {
             m.route.set('/' + first_spec);
         });
     },
+    save: function(){
+        console.log(notie);
+        m.request({
+            method: "POST", 
+            url: "/specification", 
+            data: {
+                file: Data.specification.current, 
+                text: monaco.getValue()
+            }
+        }).then(() => notie.alert({text: "Saved " + Data.specification.current}))
+        .catch((e) => notie.alert({type: 'error', text: 'Failed to save ' + Data.specification.current + '.\n Error: ' + e}));
+    },
     view: function (vnode) {
+        var self = this;
         return [
             m('div#navigator', [
                 m('div.logo',
@@ -70,7 +84,7 @@ var Specification = {
                     })))]),
             m('div#action', [
                 m('h3', vnode.attrs.file),
-                m('button', 'Save')]),
+                m('a', {onclick: self.save, class: 'btn'}, 'Save')]),
             m('pre#editor')];
     }
 };

@@ -62,7 +62,14 @@ var setValue = function(text) {
     if(this.editor)
         this.editor.setValue(text);
 }
+
+var getValue = function(text) {
+    if(this.editor)
+        return this.editor.getValue();
+}
+
 module.exports = {
     init: init,
-    setValue: setValue
+    setValue: setValue,
+    getValue: getValue
 }

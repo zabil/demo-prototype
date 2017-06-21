@@ -49,5 +49,14 @@ app.get('/steps', function (req, res) {
         .catch(console.log);
 });
 
+app.post('/specification', function(req, res){
+    fs.writeFile(path.join(specifications_folder, req.body.file), req.body.text, function (err, data) {
+        if(err!=null)
+            res.status(500).send({ error: err });
+        else
+            res.status(201).send({});
+    });
+});
+
 app.listen(3000);
 console.log("Goto http://localhost:3000");

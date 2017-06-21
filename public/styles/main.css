@@ -102,3 +102,34 @@ a {
     background-color: #CECECE;
     color: white
 }
+
+a.btn{
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    background-color: #f5c10e;
+    border-color: #e0b009;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 5px;
+    float: right;
+    margin-right: 5px;
+}
+.notie-container {
+    font-family: monospace;
+}
+
+.notie-background-info{
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(245,193,14,0.7),
+        rgba(245,193,14,0.7) 10px,
+        rgba(224,176,9,0.7) 10px,
+        rgba(224,176,9,0.7) 20px);
+    color: black;
+}
