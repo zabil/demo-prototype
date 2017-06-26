@@ -7,11 +7,13 @@ var Project = function(path) {
 
 	port = (Math.random() * 999 | 6000) + 1;
 	var daemon = spawn('gauge', ['--daemonize', '--log-level=debug', '--api-port', port, path], { cwd: "."});
-	daemon.stdout.on('data', function(){
-		socket.connect(port, "localhost")
-	});
+	setTimeout(function(){
+		if(daemon.connected){
+			socket.connect(port, "localhost")
+		}
+	},3000);
 	daemon.on('error', (err) => {
-		console.log('Failed to start child process.');
+		console.error('Failed to start child process.', err);
 	});
 }
 
