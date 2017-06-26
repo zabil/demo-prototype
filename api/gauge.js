@@ -3,16 +3,15 @@ var spawn = require('child_process').spawn;
 var net = require('net');
 var path = require('path');
 
-var Project = function(path) {
-	this.path = path
+var Project = function(p) {
+	this.path = path.resolve(p)
 	var socket = this.socket = net.Socket();
 
 	port = (Math.random() * 999 | 6000) + 1;
-	var daemon = spawn('gauge', ['--daemonize', '--log-level=debug', '--api-port', port, path], { cwd: "."});
+	var daemon = spawn('gauge', ['--daemonize', '--api-port', port, "specs"], { cwd: this.path});
+	console.log("Starting Gauge Daemon in " + this.path + " on port " + port);
 	setTimeout(function(){
-		if(daemon.connected){
-			socket.connect(port, "localhost")
-		}
+		socket.connect(port, "localhost")
 	},3000);
 	daemon.on('error', (err) => {
 		console.error('Failed to start child process.', err);
@@ -41,7 +40,7 @@ Project.prototype.get_steps = function() {
 }
 
 Project.prototype.get_specs_dir = function() {
-	return path.resolve(path.join(this.path, "specs"))
+	return path.join(this.path, "specs");
 }
 
 module.exports = {

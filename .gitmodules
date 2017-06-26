@@ -1,3 +1,6 @@
 [submodule "gauge-proto"]
 	path = gauge-proto
 	url = https://github.com/getgauge/gauge-proto.git
+[submodule "sample"]
+	path = sample
+	url = https://github.com/getgauge/griffin-sample
