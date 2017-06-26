@@ -1,8 +1,10 @@
 var protobuf = require("protobufjs");
 var spawn = require('child_process').spawn;
 var net = require('net');
+var path = require('path');
 
 var Project = function(path) {
+	this.path = path
 	var socket = this.socket = net.Socket();
 
 	port = (Math.random() * 999 | 6000) + 1;
@@ -36,6 +38,10 @@ Project.prototype.get_steps = function() {
 			})
 			.catch(reject);
 	});
+}
+
+Project.prototype.get_specs_dir = function() {
+	return path.resolve(path.join(this.path, "specs"))
 }
 
 module.exports = {

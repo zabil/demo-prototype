@@ -2,8 +2,8 @@
 ':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
 
 if (process.argv.length !== 3) {
-    console.log("Specify the specification(s) folder e.g.");
-    console.log("./griffin.js specs");
+    console.log("Specify the project root folder e.g.");
+    console.log("./griffin.js /tmp/some/project");
     process.exit(1);
 }
 
@@ -18,8 +18,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(express.static('public'));
 app.use(express.static('bin'));
 
-var specifications_folder = path.resolve(process.argv[2]);
-var project = gauge.Project(process.argv[2])
+var project = gauge.Project(process.argv[2]);
+var specifications_folder = project.get_specs_dir();
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
